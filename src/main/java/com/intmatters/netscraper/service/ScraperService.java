@@ -6,6 +6,6 @@ import java.util.Set;
 
 public interface ScraperService {
 
-    Set<ResponseDTO> getVehicleByModel(String vehicleModel);
+    Set<ResponseDTO> getChampionLane(String laneType);
 
 }

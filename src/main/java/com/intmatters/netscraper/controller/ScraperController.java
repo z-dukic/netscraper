@@ -16,9 +16,9 @@ public class ScraperController {
     @Autowired
     ScraperService scraperService;
 
-    @GetMapping(path = "/{vehicleModel}")
-    public Set<ResponseDTO> getVehicleByModel(@PathVariable String vehicleModel) {
-        return  scraperService.getVehicleByModel(vehicleModel);
+    @GetMapping(path = "/{laneType}")
+    public Set<ResponseDTO> getChampionLane(@PathVariable String laneType) {
+        return  scraperService.getChampionLane(laneType);
     }
 
 }

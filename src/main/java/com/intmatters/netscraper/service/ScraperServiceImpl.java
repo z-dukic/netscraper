@@ -1,7 +1,6 @@
 package com.intmatters.netscraper.service;
 
 import com.intmatters.netscraper.model.ResponseDTO;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,49 +14,57 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class ScraperServiceImpl implements ScraperService{
+public class ScraperServiceImpl implements ScraperService {
 
+    //URL koji je dobio
     @Value("#{'${website.urls}'.split(',')}")
     List<String> urls;
 
     @Override
-    public Set<ResponseDTO> getVehicleByModel(String vehicleModel) {
+    public Set<ResponseDTO> getChampionLane(String laneType) {
+        //Responsovi tipa {"name":"ahri", "url":"njen url"}
         Set<ResponseDTO> responseDTOS = new HashSet<>();
 
-        for (String url: urls) {
+        for (String url : urls) {
 
-                extractDataFromRiyasewana(responseDTOS, url + vehicleModel);
-            }
+            //Svi url
+            extractDataFromOPGG(responseDTOS, url + laneType);
+        }
 
         return responseDTOS;
     }
 
-    private void extractDataFromRiyasewana(Set<ResponseDTO> responseDTOS, String url) {
+    private void extractDataFromOPGG(Set<ResponseDTO> responseDTOS, String url) {
 
         try {
+            //Gets everything from that URL
             Document document = Jsoup.connect(url).get();
             System.out.println(document);
 
-            System.out.println("RAZMAK 1");
-
+            //Gets everything from that div
             Element element = document.getElementById("content-container");
             System.out.println(element);
 
-            System.out.println("RAZMAK 2");
 
+            //Gets everything from that tag ("strong")
             Elements elements = element.getElementsByTag("strong");
             System.out.println(elements);
 
-            System.out.println("RAZMAK 3");
 
-            for (Element ads: elements) {
+            for (Element ads : elements) {
                 ResponseDTO responseDTO = new ResponseDTO();
 
-                if (!StringUtils.isEmpty(ads.attr("strong")) ) {
-                    responseDTO.setTitle(ads.attr("href"));
-                    //responseDTO.setUrl(ads.attr("href"));
-                    responseDTO.setUrl("Hello world");
-                    System.out.println("RAZMAK 4");
+                //Everything in tags <strong /> gets picked
+                if (ads.tagName().equals("strong")) {
+
+                    //Save Champion into a variable
+                    String champion = ads.text();
+
+                    //Removes <strong /> tags and set it as title (from responseDTO object)
+                    responseDTO.setTitle(champion);
+
+                    //Creates URL
+                    responseDTO.setUrl("https://www.op.gg/champions/" + champion + "/mid/build?region=global&tier=platinum_plus");
                 }
                 if (responseDTO.getUrl() != null) responseDTOS.add(responseDTO);
             }
