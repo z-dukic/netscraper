@@ -36,16 +36,28 @@ public class ScraperServiceImpl implements ScraperService{
 
         try {
             Document document = Jsoup.connect(url).get();
-            Element element = document.getElementById("EntityList");
+            System.out.println(document);
 
-            Elements elements = element.getElementsByTag("a");
+            System.out.println("RAZMAK 1");
+
+            Element element = document.getElementById("content-container");
+            System.out.println(element);
+
+            System.out.println("RAZMAK 2");
+
+            Elements elements = element.getElementsByTag("strong");
+            System.out.println(elements);
+
+            System.out.println("RAZMAK 3");
 
             for (Element ads: elements) {
                 ResponseDTO responseDTO = new ResponseDTO();
 
-                if (!StringUtils.isEmpty(ads.attr("title")) ) {
-                    responseDTO.setTitle(ads.attr("title"));
-                    responseDTO.setUrl(ads.attr("href"));
+                if (!StringUtils.isEmpty(ads.attr("strong")) ) {
+                    responseDTO.setTitle(ads.attr("href"));
+                    //responseDTO.setUrl(ads.attr("href"));
+                    responseDTO.setUrl("Hello world");
+                    System.out.println("RAZMAK 4");
                 }
                 if (responseDTO.getUrl() != null) responseDTOS.add(responseDTO);
             }
