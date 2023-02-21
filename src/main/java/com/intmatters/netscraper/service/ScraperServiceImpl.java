@@ -36,7 +36,7 @@ public class ScraperServiceImpl implements ScraperService{
 
         try {
             Document document = Jsoup.connect(url).get();
-            Element element = document.getElementById("content");
+            Element element = document.getElementById("EntityList");
 
             Elements elements = element.getElementsByTag("a");
 
